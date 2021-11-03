@@ -13,16 +13,16 @@ import dao.impl.ViewModelDAOImpl;
 import entity.ViewModel;
 
 /**
- * Servlet implementation class LoadStudents
+ * Servlet implementation class SearchByName
  */
-@WebServlet("/LoadViewModel")
-public class LoadViewModel extends HttpServlet {
+@WebServlet("/SearchByName")
+public class SearchByName extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoadViewModel() {
+    public SearchByName() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,8 +32,10 @@ public class LoadViewModel extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		List<ViewModel> listViewModel = new ViewModelDAOImpl().getListViewModel();
-		request.setAttribute("list",listViewModel);
+		String searchName = request.getParameter("searchName");
+		List<ViewModel> listViewModel = new ViewModelDAOImpl().SearchByName(searchName);
+		request.setAttribute("list", listViewModel);
+		request.setAttribute("searchName", searchName);
 		request.getRequestDispatcher("listViewModel.jsp").forward(request, response);
 	}
 

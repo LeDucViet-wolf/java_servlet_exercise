@@ -38,7 +38,7 @@
 					<td>
 						<select name="CustomerId">
 							<c:forEach items="${list}" var="c">
-									<option value=${c.customerId}>${c.customerName}</option>
+									<option value="${c.customerId}">${c.customerName}</option>
 							</c:forEach>
 						</select>
 					</td>

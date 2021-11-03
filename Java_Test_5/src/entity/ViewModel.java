@@ -11,11 +11,12 @@ public class ViewModel {
 	private String email;
 	private String telephone;
 	private Boolean status;
+	
 	private Integer accountId;
 	private String accountNumber;
 	private Date createDate;
 	private Float balance;
-
+	
 	public ViewModel() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -134,4 +135,6 @@ public class ViewModel {
 	public void setBalance(Float balance) {
 		this.balance = balance;
 	}
+	
+	
 }

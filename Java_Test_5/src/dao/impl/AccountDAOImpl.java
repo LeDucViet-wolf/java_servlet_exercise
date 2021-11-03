@@ -9,50 +9,75 @@ import java.sql.SQLException;
 import dao.AccountDAO;
 import db.DBUtility;
 import entity.Account;
-import entity.Customer;
 
 public class AccountDAOImpl implements AccountDAO {
-
-	@Override
 	public boolean insertAccount(Account a) {
+		// TODO Auto-generated method stub
 		boolean bl = false;
 
 		Connection con;
-		PreparedStatement pstm = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
-			pstm = con.prepareStatement("INSERT INTO Accounts VALUES (?,?,?,?,?,?)");
-			pstm.setInt(1, a.getCustomerId());
-			pstm.setString(2, a.getAccountNumber());
-			pstm.setString(3, a.getPassword());
-			pstm.setDate(4, new Date(a.getCreateDate().getTime()));
-			pstm.setFloat(5, a.getBalance());
-			pstm.setBoolean(6, a.getStatus());
+			pstmt = con.prepareStatement("insert into Accounts values (?,?,?,?,?,?)");
+			pstmt.setInt(1, a.getCustomerId());
+			pstmt.setString(2, a.getAccountNumber());
+			pstmt.setString(3, a.getPassword());
+			pstmt.setDate(4, new Date(a.getCreateDate().getTime()));
+			pstmt.setFloat(5, a.getBalance());
+			pstmt.setBoolean(6, a.getStatus());
 
-			int i = pstm.executeUpdate();
-			if (i > 0)
+			int i = pstmt.executeUpdate();
+			if (i > 0) {
 				bl = true;
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			DBUtility.closeAll(con, pstm, rs);
+			DBUtility.closeAll(con, pstmt, rs);
 		}
+		return bl;
+	}
 
+	@Override
+	public boolean deleteAccount(Integer id) {
+		// TODO Auto-generated method stub
+		boolean bl = false;
+
+		Connection con;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		con = DBUtility.openConnection();
+		try {
+			pstmt = con.prepareStatement("update Accounts set Status = 0 where AccountId=?");
+			pstmt.setInt(1, id);
+			int i = pstmt.executeUpdate();
+			if (i > 0) {
+				bl = true;
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			DBUtility.closeAll(con, pstmt, rs);
+		}
 		return bl;
 	}
 
 	@Override
 	public Account getAccountById(int id) {
+		// TODO Auto-generated method stub
 		Account a = null;
 
 		Connection con;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement("SELECT * FROM Accounts WHERE AccountId=?");
 			pstm.setInt(1, id);
@@ -79,13 +104,14 @@ public class AccountDAOImpl implements AccountDAO {
 
 	@Override
 	public boolean saveAccount(Account a) {
+		// TODO Auto-generated method stub
 		boolean bl = false;
 
 		Connection con;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement(
 					"UPDATE Accounts SET AccountNumber=?,Password=?,CreatedDate=?,Balance=?,Status=?,CustomerId=? WHERE AccountId=?");
@@ -109,5 +135,4 @@ public class AccountDAOImpl implements AccountDAO {
 
 		return bl;
 	}
-
 }

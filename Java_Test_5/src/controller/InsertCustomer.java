@@ -20,78 +20,74 @@ import entity.Customer;
 @WebServlet("/InsertCustomer")
 public class InsertCustomer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public InsertCustomer() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#HttpServlet()
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public InsertCustomer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
-		String customerName = request.getParameter("CustomerName");
-		String gender = request.getParameter("Gender");
-		String birthday = request.getParameter("Birthday");
-		String address = request.getParameter("Address");
-		String email = request.getParameter("Email");
-		String telephone = request.getParameter("Telephone");
-		String status = request.getParameter("Status");
+		String customerName = request.getParameter("customerName");
+		String strGender = request.getParameter("gender");
+		String strBirthday = request.getParameter("birthday");
+		String address = request.getParameter("address");
+		String email = request.getParameter("email");
+		String telephone = request.getParameter("telephone");
+		String strStatus = request.getParameter("status");
 
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		Date birthdayToDate = null;
+		Date birthday = null;
 		try {
-			birthdayToDate = sf.parse(birthday);
+			birthday = sf.parse(strBirthday);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		boolean genderToBoolean = Boolean.parseBoolean(gender);
-		boolean statusToBoolean = Boolean.parseBoolean(status);
+		boolean gender = Boolean.parseBoolean(strGender);
+		boolean status = Boolean.parseBoolean(strStatus);
+		
+		boolean validateTelephone = new CustomerDAOImpl().validateTelephone(telephone);
+		boolean validateEmail = new CustomerDAOImpl().validateEmail(email);
+		
+	
 
 		Customer c = new Customer();
 		c.setCustomerName(customerName);
-		c.setGender(genderToBoolean);
-		c.setBirthday(birthdayToDate);
+		c.setGender(gender);
+		c.setBirthday(birthday);
 		c.setAddress(address);
 		c.setEmail(email);
 		c.setTelephone(telephone);
-		c.setStatus(statusToBoolean);
-
-		boolean validatePhone = new CustomerDAOImpl().validatePhone(telephone, "");
-		boolean validateEmail = new CustomerDAOImpl().validateEmail(email, "");
-
-		if (validateEmail) {
-			request.setAttribute("error", "Insert failed! Your email is exist!");
+		c.setStatus(status);
+		
+		boolean bl = new CustomerDAOImpl().insertCustomer(c);
+		if (validateEmail || validateTelephone) {
+			request.setAttribute("message", "Insert failed!");
 			request.getRequestDispatcher("insertCustomer.jsp").forward(request, response);
-		} else if (validatePhone) {
-			request.setAttribute("error", "Insert failed! Your phone is exist!");
-			request.getRequestDispatcher("insertCustomer.jsp").forward(request, response);
-		} else {
-			boolean bl = new CustomerDAOImpl().insertCustomer(c);
+		}else {
 			if (bl) {
 				request.getRequestDispatcher("index.jsp").forward(request, response);
-			} else {
-				request.setAttribute("error", "Insert failed!");
+			}else {
+				request.setAttribute("message", "Insert failed!");
 				request.getRequestDispatcher("insertCustomer.jsp").forward(request, response);
 			}
 		}
+		
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

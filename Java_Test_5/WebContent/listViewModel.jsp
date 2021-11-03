@@ -6,8 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>List VIEW MODEL</title>
-</head>
+<title>LIST VIEW MODEL</title>
 <style type="text/css">
 .center {
 	display: flex;
@@ -16,9 +15,22 @@
 	align-items: center;
 }
 </style>
+</head>
 <body>
+
 	<div class="center">
 		<h1>LIST VIEW MODEL</h1>
+		<h3 style="color: red">${error}</h3>
+		<h3 style="color: blue">${success}</h3>
+		<form action="SearchByName">
+			<label>Tìm kiếm theo tên khách hàng: </label> <input type="text"
+				name="searchName" value="${searchName}"/> <input type="submit" value="Tìm kiếm" />
+		</form>
+		<form action="SearchById">
+			<label>Tìm kiếm theo mã tài khoản hoặc mã khách hàng: </label> <input
+				type="text" name="searchId" value="${searchId}"/> <input type="submit"
+				value="Tìm kiếm" />
+		</form>
 		<c:if test="${empty list}">
 			<h3 style="color: red">No Data</h3>
 		</c:if>
@@ -37,9 +49,7 @@
 				</tr>
 				<c:forEach items="${list}" var="vm">
 					<tr>
-						<td>
-						<c:if test="${vm.accountId != 0}">${vm.accountId}</c:if>
-						</td>
+						<td><c:if test="${vm.accountId != 0}">${vm.accountId}</c:if></td>
 						<td>${vm.customerName}</td>
 						<td>${vm.gender?"Male":"Female"}</td>
 						<td><fmt:formatDate value="${vm.birthday}"
@@ -56,12 +66,14 @@
 							<c:if test="${ vm.accountId != 0}">
 								<a href="EditAccount?AccountId=${ vm.accountId }">Edit Account</a>
 							</c:if>
+							<a href="DeleteCustomer?id=${vm.customerId}">Delete Customer</a> 
+							<a href="DeleteAccount?id=${vm.accountId}">Delete Account</a>
 						</td>
 					</tr>
 				</c:forEach>
 			</table>
 		</c:if>
-		<a href="insertCustomer.jsp">Add New Customer</a>
+		<a href="insertCustomer.jsp">Add New Customer</a> 
 		<a href="AccountForm">Add New Account</a>
 	</div>
 </body>

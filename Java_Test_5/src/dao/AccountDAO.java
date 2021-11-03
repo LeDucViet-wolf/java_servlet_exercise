@@ -1,12 +1,13 @@
 package dao;
 
 import entity.Account;
-import entity.Customer;
 
 public interface AccountDAO {
-	public boolean insertAccount(Account c);
-	
+	public boolean insertAccount(Account a);
+
 	public Account getAccountById(int id);
-	
-	public boolean saveAccount(Account c);
+
+	public boolean saveAccount(Account a);
+
+	public boolean deleteAccount(Integer id);
 }

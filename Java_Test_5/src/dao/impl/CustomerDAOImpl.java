@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,33 +17,33 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	@Override
 	public boolean insertCustomer(Customer c) {
+		// TODO Auto-generated method stub
 		boolean bl = false;
 
 		Connection con;
-		PreparedStatement pstm = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
-			pstm = con.prepareStatement("INSERT INTO Customers VALUES (?,?,?,?,?,?,?)");
-			pstm.setString(1, c.getCustomerName());
-			pstm.setBoolean(2, c.getGender());
-			pstm.setDate(3, new Date(c.getBirthday().getTime()));
-			pstm.setString(4, c.getAddress());
-			pstm.setString(5, c.getEmail());
-			pstm.setString(6, c.getTelephone());
-			pstm.setBoolean(7, c.getStatus());
-
-			int i = pstm.executeUpdate();
-			if (i > 0)
+			pstmt = con.prepareStatement("insert into Customers values (?,?,?,?,?,?,?)");
+			pstmt.setString(1, c.getCustomerName());
+			pstmt.setBoolean(2, c.getGender());
+			pstmt.setDate(3, new Date(c.getBirthday().getTime()));
+			pstmt.setString(4, c.getAddress());
+			pstmt.setString(5, c.getEmail());
+			pstmt.setString(6, c.getTelephone());
+			pstmt.setBoolean(7, c.getStatus());
+			int i = pstmt.executeUpdate();
+			if (i > 0) {
 				bl = true;
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			DBUtility.closeAll(con, pstm, rs);
+			DBUtility.closeAll(con, pstmt, rs);
 		}
-
 		return bl;
 	}
 
@@ -55,7 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement("SELECT * FROM Customers c WHERE c.Telephone=?");
 			if (!id.equals("")) {
@@ -95,7 +94,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement("SELECT * FROM Customers c WHERE c.Email=?");
 			if (!id.equals("")) {
@@ -128,15 +127,92 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return bl;
 	}
 
+	public boolean validateTelephone(String telephone) {
+		// TODO Auto-generated method stub
+		boolean bl = false;
+
+		Connection con;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		con = DBUtility.openConnection();
+		try {
+			pstmt = con.prepareStatement("select * from Customers c where c.Telephone=?");
+			pstmt.setString(1, telephone);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bl = true;
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			DBUtility.closeAll(con, pstmt, rs);
+		}
+		return bl;
+	}
+
+	public boolean validateEmail(String email) {
+		// TODO Auto-generated method stub
+		boolean bl = false;
+
+		Connection con;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		con = DBUtility.openConnection();
+		try {
+			pstmt = con.prepareStatement("select * from Customers c where c.Email=?");
+			pstmt.setString(1, email);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bl = true;
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			DBUtility.closeAll(con, pstmt, rs);
+		}
+		return bl;
+	}
+
+	@Override
+	public boolean deleteCustomer(Integer id) {
+		// TODO Auto-generated method stub
+		boolean bl = false;
+
+		Connection con;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		con = DBUtility.openConnection();
+		try {
+			pstmt = con.prepareStatement("update Customers set Status = 0 where CustomerId=?");
+			pstmt.setInt(1, id);
+			int i = pstmt.executeUpdate();
+			if (i > 0) {
+				bl = true;
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			DBUtility.closeAll(con, pstmt, rs);
+		}
+		return bl;
+	}
+
 	@Override
 	public List<Customer> getListCustomer() {
+		// TODO Auto-generated method stub
 		List<Customer> list = new ArrayList<Customer>();
 
 		Connection con;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement("SELECT * FROM Customers");
 			rs = pstm.executeQuery();
@@ -169,7 +245,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement("SELECT * FROM Accounts a WHERE a.CustomerId=?");
 			if (!accountId.equals("")) {
@@ -202,7 +278,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement("SELECT * FROM Customers WHERE CustomerId=?");
 			pstm.setInt(1, id);
@@ -236,7 +312,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 
-		con = DBUtility.openConnect();
+		con = DBUtility.openConnection();
 		try {
 			pstm = con.prepareStatement(
 					"UPDATE Customers SET CustomerName=?,Gender=?,Birthday=?,Address=?,Email=?,Telephone=?,Status=? WHERE CustomerId=?");
