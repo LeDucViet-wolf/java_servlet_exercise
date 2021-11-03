@@ -1,0 +1,25 @@
+CREATE DATABASE DB_JSPServlet_Practive_CRUD
+GO
+USE DB_JSPServlet_Practive_CRUD
+GO
+CREATE TABLE Customers (
+	CustomerId INT IDENTITY PRIMARY KEY,
+	CustomerName NVARCHAR(255) NOT NULL,
+	Gender INT,
+	Birthday DATETIME NOT NULL,
+	[Address] NVARCHAR(255) NOT NULL,
+	Email VARCHAR(255) NOT NULL,
+	Telephone VARCHAR(255) NOT NULL,
+	[Status] INT NOT NULL
+);
+GO
+CREATE TABLE Accounts (
+	AccountId INT IDENTITY PRIMARY KEY,
+	CustomerId INT,
+	AccountNumber VARCHAR(255) NOT NULL,
+	[Password] VARCHAR(255) NOT NULL,
+	CreatedDate DATETIME DEFAULT GETDATE(),
+	Balance FLOAT NOT NULL DEFAULT 0,
+	[Status] INT NOT NULL,
+	FOREIGN KEY (CustomerId) REFERENCES Customers(CustomerId)
+)
